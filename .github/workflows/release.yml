@@ -33,6 +33,12 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: release/game.love
+
+    # Configure Git user info
+    - name: Configure Git user
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
     
     # Criar a release no GitHub
     - name: Create GitHub Release
