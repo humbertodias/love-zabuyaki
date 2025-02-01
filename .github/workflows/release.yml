@@ -1,0 +1,39 @@
+name: Create Release for Love2D Project
+
+on:
+  push:
+    tags:
+      - 'v*'  # Gatilho para criar a release quando um novo tag com 'v' for feito
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    # Baixar o repositório
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    # Instalar dependências do Love2D
+    - name: Install Love2D
+      run: |
+        sudo apt-get update
+        sudo apt-get install love
+    
+    # Empacotar o projeto Love2D
+    - name: Package Love2D project
+      run: |
+        mkdir release
+        love . --compile release/game.love
+    
+    # Criar o arquivo de release
+    - name: Upload release assets
+      uses: softprops/action-gh-release@v2
+      with:
+        files: release/game.love
+    
+    # Criar a release no GitHub
+    - name: Create GitHub Release
+      run: |
+        git tag -a v$(date +%Y%m%d%H%M%S) -m "Release $(date +%Y%m%d%H%M%S)"
+        git push origin --tags
