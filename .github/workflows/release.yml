@@ -1,6 +1,7 @@
 name: Create Release for Love2D Project
 
 on:
+  workflow_dispatch:  # Manual trigger from the GitHub UI
   push:
     tags:
       - 'v*'  # Gatilho para criar a release quando um novo tag com 'v' for feito
