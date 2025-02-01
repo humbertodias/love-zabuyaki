@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      LOVE_FILE_NAME: "zabuyaki.love"
+    
     steps:
     
     - name: Checkout repository
@@ -21,11 +24,9 @@ jobs:
     
     - name: Package Love2D project
       run: |
-        mkdir release
-        #love . --compile release/game.love
-        zip -9 -r release/game.love . -x "*.git*" "*.DS_Store*"
+        zip -9 -r $LOVE_FILE_NAME . -x "*.git*" "*.DS_Store*"
     
     - name: Upload release assets
       uses: softprops/action-gh-release@v2
       with:
-        files: release/game.love
+        files: $LOVE_FILE_NAME
