@@ -4,44 +4,28 @@ on:
   workflow_dispatch:  # Manual trigger from the GitHub UI
   push:
     tags:
-      - 'v*'  # Gatilho para criar a release quando um novo tag com 'v' for feito
+      - 'v*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     
-    # Baixar o repositório
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    # Instalar dependências do Love2D
     - name: Install Love2D
       run: |
         sudo apt update -y
         sudo apt install -y love zip
     
-    # Empacotar o projeto Love2D
     - name: Package Love2D project
       run: |
         mkdir release
         #love . --compile release/game.love
         zip -9 -r release/game.love . -x "*.git*" "*.DS_Store*"
     
-    # Criar o arquivo de release
     - name: Upload release assets
       uses: softprops/action-gh-release@v2
       with:
         files: release/game.love
-
-    # Configure Git user info
-    - name: Configure Git user
-      run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-    
-    # Criar a release no GitHub
-    - name: Create GitHub Release
-      run: |
-        git tag -a v$(date +%Y%m%d%H%M%S) -m "Release $(date +%Y%m%d%H%M%S)"
-        git push origin --tags
